@@ -1038,7 +1038,7 @@ BUTTON_TYPES = [
         name="PowerControlMode Trigger (mode 8/9)",
         key="powercontrolmode8_trigger",
         register=0xA0,
-        allowedtypes=AC | HYBRID | GEN4 | GEN5,
+        allowedtypes=AC | HYBRID | GEN4 | GEN5 | GEN6,
         write_method=WRITE_MULTI_MODBUS,
         icon="mdi:battery-clock",
         value_function=autorepeat_function_powercontrolmode8_recompute,
@@ -1342,7 +1342,7 @@ NUMBER_TYPES = [
         name="Remotecontrol Autorepeat Duration (mode 1-9)",
         key="remotecontrol_autorepeat_duration",
         unit=REGISTER_U16,
-        allowedtypes=AC | HYBRID | GEN4 | GEN5,
+        allowedtypes=AC | HYBRID | GEN4 | GEN5 | GEN6,
         icon="mdi:home-clock",
         initvalue=0,  # seconds -
         native_min_value=0,
@@ -1356,7 +1356,7 @@ NUMBER_TYPES = [
     SolaxModbusNumberEntityDescription(
         name="Remotecontrol Import Limit (mode 1-9)",
         key="remotecontrol_import_limit",
-        allowedtypes=AC | HYBRID | GEN4 | GEN5,
+        allowedtypes=AC | HYBRID | GEN4 | GEN5 | GEN6,
         native_min_value=0,
         native_max_value=30000,  # overwritten by MAX_EXPORT
         native_step=100,
@@ -1373,7 +1373,7 @@ NUMBER_TYPES = [
     SolaxModbusNumberEntityDescription(
         name="Remotecontrol PV Power Limit (mode 8/9)",
         key="remotecontrol_pv_power_limit",
-        allowedtypes=AC | HYBRID | GEN4 | GEN5,
+        allowedtypes=AC | HYBRID | GEN4 | GEN5 | GEN6,
         native_min_value=0,
         native_max_value=30000,  
         native_step=100,
@@ -1388,7 +1388,7 @@ NUMBER_TYPES = [
     SolaxModbusNumberEntityDescription(
         name="Remotecontrol Push Mode Power (mode 8/9)",
         key="remotecontrol_push_mode_power_8_9",
-        allowedtypes=AC | HYBRID | GEN4 | GEN5,
+        allowedtypes=AC | HYBRID | GEN4 | GEN5 | GEN6,
         native_min_value=-30000,
         native_max_value=30000,  
         native_step=100,
@@ -1403,7 +1403,7 @@ NUMBER_TYPES = [
     SolaxModbusNumberEntityDescription(
         name="Export-First Battery Charge Limit (mode 8/9)",
         key="export_first_battery_charge_limit_8_9",
-        allowedtypes=AC | HYBRID | GEN4 | GEN5,
+        allowedtypes=AC | HYBRID | GEN4 | GEN5 | GEN6,
         native_min_value=0,
         native_max_value=100,
         native_step=1,
@@ -1417,7 +1417,7 @@ NUMBER_TYPES = [
     SolaxModbusNumberEntityDescription(
         name="Remotecontrol Target SOC (mode 9)",
         key="remotecontrol_target_soc_8_9",
-        allowedtypes=AC | HYBRID | GEN4 | GEN5,
+        allowedtypes=AC | HYBRID | GEN4 | GEN5 | GEN6,
         native_min_value=-0,
         native_max_value=100,  
         native_step=1,
@@ -1431,7 +1431,7 @@ NUMBER_TYPES = [
     SolaxModbusNumberEntityDescription(
         name="Remotecontrol Timeout (mode 1-9)",
         key="remotecontrol_timeout",
-        allowedtypes=AC | HYBRID | GEN4 | GEN5,
+        allowedtypes=AC | HYBRID | GEN4 | GEN5 | GEN6,
         native_min_value=0,
         native_max_value=28800,
         native_step=1,
@@ -1465,6 +1465,34 @@ NUMBER_TYPES = [
         initvalue=15000,
         native_step=200,
         entity_registry_enabled_default=False,
+        write_method=WRITE_DATA_LOCAL,
+    ),
+    SolaxModbusNumberEntityDescription(
+        name="Config Measured Power Offset",
+        key="measured_power_offset",
+        allowedtypes=AC | HYBRID,
+        native_min_value=-200,
+        native_max_value=200,
+        native_step=0.5,
+        native_unit_of_measurement=UnitOfPower.WATT,
+        entity_category=EntityCategory.CONFIG,
+        initvalue=0,
+        entity_registry_enabled_default=False,
+        display_as_box=True,
+        write_method=WRITE_DATA_LOCAL,
+    ),
+    SolaxModbusNumberEntityDescription(
+        name="Config Measured Power Gain",
+        key="measured_power_gain",
+        allowedtypes=AC | HYBRID,
+        native_min_value=90, # Allow correction up to +/-10%.
+        native_max_value=110,
+        native_step=0.1,
+        native_unit_of_measurement=PERCENTAGE,
+        entity_category=EntityCategory.CONFIG,
+        initvalue=100,
+        entity_registry_enabled_default=False,
+        display_as_box=True,
         write_method=WRITE_DATA_LOCAL,
     ),
     ###
@@ -1995,6 +2023,7 @@ NUMBER_TYPES = [
         allowedtypes=AC | HYBRID | GEN4 | GEN5 | GEN6,
         entity_category=EntityCategory.CONFIG,
         entity_registry_enabled_default=False,
+        display_as_box=True,
         icon="mdi:ev-station",
     ),
     SolaxModbusNumberEntityDescription(
@@ -2008,6 +2037,7 @@ NUMBER_TYPES = [
         native_step=1,
         allowedtypes=AC | HYBRID | GEN4 | GEN5 | GEN6 | DCB,
         entity_category=EntityCategory.CONFIG,
+        display_as_box=True,
         icon="mdi:connection",
     ),
     SolaxModbusNumberEntityDescription(
@@ -2371,7 +2401,7 @@ SELECT_TYPES = [
             1: "Set",
             2: "Update",
         },
-        allowedtypes=AC | HYBRID | GEN4 | GEN5,
+        allowedtypes=AC | HYBRID | GEN4 | GEN5 | GEN6,
         initvalue="Set",
         icon="mdi:transmission-tower",
     ),
@@ -2390,14 +2420,14 @@ SELECT_TYPES = [
             85: "Enabled No Discharge",
             # 9:  "Mode 9 - PV and BAT control - Target SOC",  
         },
-        allowedtypes=AC | HYBRID | GEN4 | GEN5,
+        allowedtypes=AC | HYBRID | GEN4 | GEN5 | GEN6,
         initvalue="Disabled",
         icon="mdi:transmission-tower",
     ),
     SolaxModbusSelectEntityDescription(
         name="Remotecontrol Timeout Next Motion (mode 1-9)",
         key="remotecontrol_timeout_next_motion",
-        allowedtypes=AC | HYBRID | GEN4 | GEN5,
+        allowedtypes=AC | HYBRID | GEN4 | GEN5 | GEN6,
         option_dict={
             0xA0:  "VPP Off", 
             0xA1: "default choice",
@@ -5901,6 +5931,7 @@ SENSOR_TYPES_MAIN: list[SolaXModbusSensorEntityDescription] = [
         state_class=SensorStateClass.MEASUREMENT,
         register=0x46,
         register_type=REG_INPUT,
+        scale=value_function_gain_offset,
         unit=REGISTER_S32,
         allowedtypes=AC | HYBRID,
     ),
@@ -6907,7 +6938,7 @@ SENSOR_TYPES_MAIN: list[SolaXModbusSensorEntityDescription] = [
             9: "Individual Setting - Target SOC Mode",
         },
         icon="mdi:dip-switch",
-        allowedtypes=AC | HYBRID | GEN4 | GEN5,
+        allowedtypes=AC | HYBRID | GEN4 | GEN5 | GEN6,
     ),
     SolaXModbusSensorEntityDescription(
         name="Target Finish Flag",
@@ -9648,7 +9679,7 @@ class solax_plugin(plugin_base):
             self.inverter_model = "X3-Ultra-20kW"
         elif seriesnumber.startswith("H3BF25"):
             invertertype = HYBRID | GEN5 | MPPT3 | X3  # X3 Ultra F
-            self.inverter_model = "X3-Ultra-20kW"
+            self.inverter_model = "X3-Ultra-25kW"
         elif seriesnumber.startswith("H3BF30"):
             invertertype = HYBRID | GEN5 | MPPT3 | X3  # X3 Ultra F
             self.inverter_model = "X3-Ultra-30kW"
